@@ -17,7 +17,7 @@ This repo contains sample code to reproduce the material covered in Kùzu's YouT
 
 ## Setting up Kùzu
 
-Kùzu is an embedded database that runs in-process, so there's no server to set up. Simply install the client library for your language of choice and you're ready to go! A couple of examples are shown below.
+Kùzu is an embedded graph database that runs in-process, so there's no server to set up. Simply install the client library for your language of choice and you're ready to go! A couple of examples are shown below.
 
 ### CLI
 
