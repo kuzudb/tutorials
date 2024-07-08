@@ -1,1 +1,6 @@
 kuzu==0.4.2
+polars==1.0.0
+pyarrow==16.1.0
+faker==26.0.0
+pandas==2.2.2
+numpy~=1.26.0
