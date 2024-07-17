@@ -1,0 +1,10 @@
+services:
+  explorer:
+    image: kuzudb/explorer:dev
+    environment:
+      - MODE=READ_WRITE
+    ports:
+      - 8000:8000
+    volumes:
+      - ./db:/database
+      - ../data:/data
