@@ -1,0 +1,6 @@
+[workspace]
+
+members = [
+  "src/video_2/rust"
+]
+resolver = "2"

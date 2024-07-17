@@ -1,0 +1,9 @@
+CREATE NODE TABLE Person(name STRING, age INT64, PRIMARY KEY (name));
+CREATE NODE TABLE City(name STRING, population INT64, PRIMARY KEY (name));
+CREATE REL TABLE Follows(FROM Person TO Person);
+CREATE REL TABLE LivesIn(FROM Person TO City);
+
+COPY Person FROM './data/person.csv';
+COPY City FROM './data/city.csv';
+COPY Follows FROM './data/follows.csv';
+COPY LivesIn FROM './data/lives_in.csv';
