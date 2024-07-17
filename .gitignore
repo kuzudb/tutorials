@@ -157,3 +157,4 @@ cython_debug/
 
 # Custom
 src/python/external_db
+history.txt
