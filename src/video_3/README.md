@@ -51,8 +51,7 @@ Alternatively, you can type in the following command in your terminal:
 
 ```bash
 docker run -p 8000:8000 \
-           -v ./ex_kuzu_db:/database \
-           -v ./data:/data \
+           -v ./ex_kuzu_db:/database
            -e MODE=READ_WRITE \
            --rm kuzudb/explorer:latest
 ```
@@ -150,4 +149,4 @@ data.
 | 4 | Find 3 persons who have all transferred money to each other (in at least one direction). <br>**Note:** For this pattern query, we can eliminate duplicate results from undirected path matches. Cypher provides a [`DISTINCT`](https://docs.kuzudb.com/cypher/query-clauses/return/#using-distinct-for-duplicate-elimination) clause for this.
 
 The SQL queries that are possible to write for each corresponding Cypher query are provided in the `sql` directory. Queries 3 and 4 are much harder to
-write in SQL, and are hence left out.
+write in SQL, and are hence left out in this exercise.
