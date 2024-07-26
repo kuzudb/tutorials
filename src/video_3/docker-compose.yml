@@ -1,11 +1,10 @@
 services:
   explorer:
-    image: kuzudb/explorer:dev
+    image: kuzudb/explorer:latest
     restart: unless-stopped
     environment:
-      - MODE=READ_WRITE
+      - MODE=READ_ONLY
     ports:
       - 8000:8000
     volumes:
       - ./ex_db_kuzu:/database
-      - ./data:/data
