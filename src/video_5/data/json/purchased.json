@@ -1,0 +1,42 @@
+[
+    {
+        "person_name": "Alex",
+        "product_name": "Laptop",
+        "quantity": 1
+    },
+    {
+        "person_name": "Alex",
+        "product_name": "iPhone",
+        "quantity": 1
+    },
+    {
+        "person_name": "Hazel",
+        "product_name": "Headphones",
+        "quantity": 2
+    },
+    {
+        "person_name": "Kim",
+        "product_name": "Mouse",
+        "quantity": 3
+    },
+    {
+        "person_name": "Kim",
+        "product_name": "Headphones",
+        "quantity": 1
+    },
+    {
+        "person_name": "Luna",
+        "product_name": "Laptop",
+        "quantity": 1
+    },
+    {
+        "person_name": "Luna",
+        "product_name": "iPhone",
+        "quantity": 1
+    },
+    {
+        "person_name": "Luna",
+        "product_name": "Mouse",
+        "quantity": 1
+    }
+]
