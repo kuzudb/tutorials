@@ -1,6 +1,7 @@
 import kuzu
 import shutil
 import pandas as pd
+
 shutil.rmtree("./ex_db_kuzu", ignore_errors=True)
 db = kuzu.Database("./ex_db_kuzu")
 conn = kuzu.Connection(db)
