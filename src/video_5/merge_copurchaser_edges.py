@@ -1,7 +1,6 @@
 """
 This script adds copurchaser edges to the graph, based on whether two people have purchased the same product.
 """
-
 import kuzu
 
 # Open existing Kùzu database
@@ -14,8 +13,8 @@ conn.execute("CREATE REL TABLE IF NOT EXISTS COPURCHASED(FROM Customer TO Custom
 # Add copurchaser edges to the graph
 conn.execute(
     """
-    MATCH (c1:Customer)-[r:PURCHASED]->(p:Product)<-[r2:PURCHASED]-(c2:Customer)
-    WHERE c1.name < c2.name
+    MATCH (c1:Customer)-[:PURCHASED]->(:Product)<-[:PURCHASED]-(c2:Customer)
+    WHERE id(c1) < id(c2)
     MERGE (c1)-[:COPURCHASED]->(c2);
     """
 )
