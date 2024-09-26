@@ -1,6 +1,6 @@
-# A deep dive into graph visualization using Kùzu Explorer
+# Interoperability features of Kùzu (1)
 
-Source code for the YouTube video on interoperability between Kùzu and various data formats and
+Source code for the YouTube video on interoperability between Kùzu, various data formats and
 external databases.
 
 ## Setup
