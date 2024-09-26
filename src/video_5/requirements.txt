@@ -1,0 +1,6 @@
+
+kuzu==0.6.0
+polars==1.8.0
+pyarrow==17.0.0
+pandas==2.2.3
+asyncpg==0.29.0
