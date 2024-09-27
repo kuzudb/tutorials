@@ -1,6 +1,6 @@
 # A deep dive into Kùzu Explorer
 
-Source code for the YouTube video on using Kùzu Explorer.
+Source code for the [YouTube video](https://www.youtube.com/watch?v=yKcVV_bhBTo) on using Kùzu Explorer.
 
 ## Dataset
 

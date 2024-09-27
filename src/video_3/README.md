@@ -1,6 +1,6 @@
 # When do you need graph modeling & querying?
 
-Source code for the YouTube video on when you need graph modeling and querying.
+Source code for the [YouTube video](https://www.youtube.com/watch?v=6lJG-0BYQoA) on when you need graph modeling and querying.
 
 ## Setup
 

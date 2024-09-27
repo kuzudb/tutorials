@@ -1,7 +1,7 @@
 # Interoperability features of Kùzu (1)
 
-Source code for the YouTube video on interoperability between Kùzu, various data formats and
-external databases.
+Source code for the [YouTube video](https://www.youtube.com/watch?v=dE5J0pw8vWE)
+on interoperability between Kùzu, various data formats and external databases.
 
 ## Setup
 
