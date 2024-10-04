@@ -1,0 +1,22 @@
+[
+    {
+        "c_id": "c1",
+        "name": "Diabetes (Type 1)",
+        "description": "Diabetes is a chronic condition where the body can't properly regulate blood sugar levels, either due to insufficient insulin production or ineffective use of insulin, leading to potential health complications."
+    },
+    {
+        "c_id": "c2",
+        "name": "Asthma",
+        "description": "Asthma is a chronic condition that affects the airways in your lungs, causing inflammation and narrowing of the airways. This can lead to difficulty breathing, coughing, and other symptoms."
+    },
+    {
+        "c_id": "c3",
+        "name": "Allergic Rhinitis",
+        "description": "Allergic rhinitis, also known as hay fever, is a condition where your immune system overreacts to allergens like pollen, mold, or pet dander, causing symptoms like sneezing, congestion, and nasal itching."
+    },
+    {
+        "c_id": "c4",
+        "name": "Migraine",
+        "description": "Migraine is a common neurological condition characterized by recurring headaches with associated symptoms like nausea, vomiting, and sensitivity to light or sound. It can be severe and disabling, impacting daily life."
+    }
+]

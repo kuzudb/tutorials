@@ -1,0 +1,59 @@
+[
+    {
+        "p_id": "p1",
+        "name": "Gregory",
+        "info": {
+            "height": 1.81,
+            "weight": 75.5,
+            "age": 35,
+            "insurance_provider": [
+                {
+                    "type": "health",
+                    "name": "Blue Cross Blue Shield",
+                    "policy_number": "1536425345"
+                },
+                {
+                    "type": "dental",
+                    "name": "Cigna dental",
+                    "policy_number": "745332412"
+                }
+            ]
+        }
+    },
+    {
+        "p_id": "p2",
+        "name": "Alicia",
+        "info": {
+            "height": 1.65,
+            "weight": 60.1,
+            "age": 28,
+            "insurance_provider": [
+                {
+                    "type": "health",
+                    "name": "Aetna",
+                    "policy_number": "9876543210"
+                },
+                {
+                    "type": "vision",
+                    "name": "VSP",
+                    "policy_number": "1784567890"
+                }
+            ]
+        }
+    },
+    {
+        "p_id": "p3",
+        "name": "Rebecca",
+        "info": {
+            "height": 1.78,
+            "age": 23,
+            "insurance_provider": [
+                {
+                    "type": "health",
+                    "name": "Blue Cross Blue Shield",
+                    "policy_number": "5678901234"
+                }
+            ]
+        }
+    }
+]
