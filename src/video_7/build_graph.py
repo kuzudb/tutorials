@@ -37,19 +37,6 @@ def process_scholar_data(path: str) -> list[dict[str, str | list[str]]]:
     return scholars
 
 
-def create_prize_node_table(category: str, conn: kuzu.Connection) -> None:
-    conn.execute(
-        f"""
-        COPY {category} FROM (
-            LOAD FROM df
-            WHERE type = "laureate" AND category = $category
-            RETURN DISTINCT year, category
-        )
-    """,
-        parameters={"category": category},
-    )
-
-
 def create_schema(conn: kuzu.Connection) -> None:
     conn.execute("CREATE NODE TABLE Scholar(name STRING, type STRING, PRIMARY KEY (name))")
     conn.execute("CREATE NODE TABLE Physics(year STRING, category STRING, PRIMARY KEY (year))")
@@ -68,6 +55,19 @@ def create_schema(conn: kuzu.Connection) -> None:
         """
     )
     print("Created node and relationship tables")
+
+
+def create_prize_node_table(category: str, conn: kuzu.Connection) -> None:
+    conn.execute(
+        f"""
+        COPY {category} FROM (
+            LOAD FROM df
+            WHERE type = "laureate" AND category = $category
+            RETURN DISTINCT year, category
+        )
+    """,
+        parameters={"category": category},
+    )
 
 
 def create_prize_node_tables(conn: kuzu.Connection) -> None:

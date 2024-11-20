@@ -1,4 +1,4 @@
-kuzu==0.6.1
+kuzu==0.7.0
 networkx==3.4.2
 polars==1.9.0
 pyarrow==17.0.0

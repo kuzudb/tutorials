@@ -20,7 +20,7 @@ def add_column(conn: kuzu.Connection, table_name: str, column_name: str, column_
         pass
 
 
-def get_mentorship_graph(conn: kuzu.Connection) -> nx.Graph:
+def get_mentorship_graph(conn: kuzu.Connection, is_directed: bool = False) -> nx.Graph:
     res = conn.execute(
         """
         MATCH (a:Scholar)-[b:MENTORED]->(c:Scholar)
@@ -28,7 +28,7 @@ def get_mentorship_graph(conn: kuzu.Connection) -> nx.Graph:
         RETURN *
         """
     )
-    return res.get_as_networkx(directed=False)
+    return res.get_as_networkx(directed=is_directed)
 
 
 def calculate_metric(G: nx.Graph, metric_fn: callable) -> pl.DataFrame:
@@ -47,15 +47,9 @@ def update_database(conn: kuzu.Connection, df: pl.DataFrame, metric_name: str) -
     )
 
 
-def main() -> None:
-    conn = init_database("ex_db_kuzu")
-
-    # Add necessary columns
-    add_column(conn, "Scholar", "pagerank", "DOUBLE DEFAULT 0.0")
-    add_column(conn, "Scholar", "betweenness_centrality", "DOUBLE DEFAULT 0.0")
-
+def main(conn: kuzu.Connection) -> None:
     # Get graph
-    G = get_mentorship_graph(conn)
+    G = get_mentorship_graph(conn, is_directed=True)
 
     # Calculate and update PageRank
     pagerank_df = calculate_metric(G, nx.pagerank)
@@ -69,4 +63,13 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    conn = init_database("ex_db_kuzu")
+
+    # Add necessary columns
+    add_column(conn, "Scholar", "pagerank", "DOUBLE DEFAULT 0.0")
+    add_column(conn, "Scholar", "betweenness_centrality", "DOUBLE DEFAULT 0.0")
+
+    res = conn.execute("MATCH (s:Scholar {name: 'Marie Sklodowska Curie'}) RETURN s.*")
+    df = res.get_as_pl()
+
+    main(conn)
