@@ -8,7 +8,7 @@ import networkx as nx
 import polars as pl
 
 
-def init_database(db_path: str) -> kuzu.Connection:
+def get_connection(db_path: str) -> kuzu.Connection:
     db = kuzu.Database(db_path)
     return kuzu.Connection(db)
 
@@ -47,23 +47,8 @@ def update_database(conn: kuzu.Connection, df: pl.DataFrame, metric_name: str) -
     )
 
 
-def main(conn: kuzu.Connection) -> None:
-    # Get graph
-    G = get_mentorship_graph(conn, is_directed=True)
-
-    # Calculate and update PageRank
-    pagerank_df = calculate_metric(G, nx.pagerank)
-    print(pagerank_df.sort("metric", descending=True).head(10))
-    update_database(conn, pagerank_df, "pagerank")
-
-    # Calculate and update Betweenness Centrality
-    bc_df = calculate_metric(G, nx.betweenness_centrality)
-    print(bc_df.sort("metric", descending=True).head(10))
-    update_database(conn, bc_df, "betweenness_centrality")
-
-
 if __name__ == "__main__":
-    conn = init_database("ex_db_kuzu")
+    conn = get_connection("ex_db_kuzu")
 
     # Add necessary columns
     add_column(conn, "Scholar", "pagerank", "DOUBLE DEFAULT 0.0")
@@ -72,4 +57,15 @@ if __name__ == "__main__":
     res = conn.execute("MATCH (s:Scholar {name: 'Marie Sklodowska Curie'}) RETURN s.*")
     df = res.get_as_pl()
 
-    main(conn)
+    # Get graph
+    G = get_mentorship_graph(conn, is_directed=True)
+
+    # Calculate and update PageRank
+    pagerank_df = calculate_metric(G, nx.pagerank)
+    print("Finished calculating PageRank")
+    update_database(conn, pagerank_df, "pagerank")
+
+    # Calculate and update Betweenness Centrality
+    bc_df = calculate_metric(G, nx.betweenness_centrality)
+    print("Finished calculating Betweenness Centrality")
+    update_database(conn, bc_df, "betweenness_centrality")
