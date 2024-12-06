@@ -5,7 +5,7 @@ from typing import Literal
 import kuzu
 import nest_asyncio
 from dotenv import load_dotenv
-from llama_index.core import PropertyGraphIndex, Settings, SimpleDirectoryReader
+from llama_index.core import PropertyGraphIndex, SimpleDirectoryReader
 from llama_index.core.indices.property_graph import SchemaLLMPathExtractor
 from llama_index.core.graph_stores.types import Relation, EntityNode
 from llama_index.embeddings.openai import OpenAIEmbedding
@@ -17,6 +17,7 @@ load_dotenv()
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 assert OPENAI_API_KEY is not None, "OPENAI_API_KEY is not set"
+SEED = 42
 
 # --- Stage 1: Indexing ---
 
@@ -25,15 +26,14 @@ db = kuzu.Database("ex_kuzu_db")
 
 # Set up the embedding model and LLM
 embed_model = OpenAIEmbedding(model_name="text-embedding-3-small")
-extraction_llm = OpenAI(model="gpt-4o-mini", temperature=0.0)
-generation_llm = OpenAI(model="gpt-4o-mini", temperature=0.3)
+extraction_llm = OpenAI(model="gpt-4o-mini", temperature=0.0, seed=SEED)
+generation_llm = OpenAI(model="gpt-4o-mini", temperature=0.3, seed=SEED)
 
 # Load the dataset on Marie Curie
 documents = SimpleDirectoryReader("./data").load_data()
-documents[0].text
 
 # Define the allowed entities and relationships
-entities = Literal["PERSON", "NOBELPRIZE", "LOCATION", "DISCOVERY"]
+entities = Literal["PERSON", "NOBELPRIZE", "DISCOVERY"]
 relations = Literal["DISCOVERED", "IS_MARRIED_TO", "WORKED_WITH", "WON"]
 
 # Define explicit relationship directions as a list of triples
@@ -70,26 +70,28 @@ kg_index = PropertyGraphIndex.from_documents(
     show_progress=True,
 )
 
+# # If we already have a graph store, we can load the index from it
+# kg_index = PropertyGraphIndex.from_existing(
+#     property_graph_store=graph_store,
+# )
+
 # --- Stage 2: Retrieval and Querying ---
 
-# Choose the LLM to use for generation
-Settings.llm = generation_llm
-
-# Create a LlamaIndex retriever and query engine so we can query the graph
-kg_retriever = kg_index.as_retriever()
-kg_query_engine = kg_index.as_query_engine()
+# Create a LlamaIndex query engine so we can query the graph
+kg_query_engine = kg_index.as_query_engine(llm=generation_llm)
 
 questions = [
     "Who discovered Radium?",
-    "Who won the Nobel Prize in Physics?",
+    "Who did Paul Langevin work with?",
 ]
 
 for question in questions:
-    print(f"\n\nQuestion: {question}\n")
+    print(f"Question: {question}")
+    # Generate a response to the question
     response = kg_query_engine.query(question)
-    print(str(response))
-    # for node in kg_retriever.retrieve(question):
-    #     print(f"Retrieved triple: {node.text}")
+    print(f"Response: {str(response)}\n---\n")
+
+kg_query_engine.retrieve(questions[1])[-1].text
 
 # Augment the graph with additional nodes and relationships
 
@@ -99,17 +101,24 @@ graph_store.upsert_nodes(
     ]
 )
 
+graph_store.delete(entity_names=["Nobel Prize"], relation_names=["IS_MARRIED_TO"])
+
 graph_store.upsert_relations(
     [
         Relation(
             label="WORKED_WITH",
+            source_id="Paul Langevin",
+            target_id="Pierre Curie",
+        ),
+        Relation(
+            label="IS_MARRIED_TO",
             source_id="Pierre Curie",
-            target_id="Paul Langevin",
+            target_id="Marie Curie",
         ),
         Relation(
             label="DISCOVERED",
             source_id="Pierre Curie",
-            target_id="radium",
+            target_id="Radium",
         ),
         Relation(
             label="WON",
@@ -124,18 +133,17 @@ graph_store.upsert_relations(
     ]
 )
 
-graph_store.delete(["Nobel Prize"])
-
-Settings.llm = generation_llm
-
+# Let's run the queries again
 questions = [
     "Who discovered Radium?",
-    "Who won the Nobel Prize in Physics?",
+    "Who did Paul Langevin work with?",
 ]
 
 for question in questions:
-    print(f"\n\nQuestion: {question}\n")
+    print(f"---\nQuestion: {question}")
+    # Generate a response to the question
     response = kg_query_engine.query(question)
-    print(str(response))
-    # for node in kg_retriever.retrieve(question):
-    #     print(f"Retrieved triple: {node.text}")
+    print(f"Response: {str(response)}\n\n")
+    for item in kg_query_engine.retrieve(question):
+        print(f"Retrieved triple: {item.text}")
+
