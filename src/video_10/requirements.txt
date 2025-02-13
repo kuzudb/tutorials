@@ -1,0 +1,3 @@
+kuzu==0.8.0
+polars==1.21.0
+pyarrow==19.0.0
