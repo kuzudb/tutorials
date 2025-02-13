@@ -75,17 +75,33 @@ LIMIT 100
 
 ## Steps
 
-There are two datasets we will be combining to run the full-text search example.
+### Download the data
 
-1. `product.csv` - A dataset of retail products from the [WANDS benchmark](https://github.com/wayfair/WANDS).
-2. A dataset of 1000 persons generated on the fly showing which products they purchased, and where they live.
+The dataset used in this example is the [WANDS benchmark](https://github.com/wayfair/WANDS).
+Clone the repository and navigate to the `dataset` directory.
+
+```bash
+git clone https://github.com/wayfair/WANDS.git
+cd WANDS/dataset
+```
+
+The file `product.csv` is the dataset of retail products that contain ~42k records of products
+and their associated metadata.
+
+### Generate the artificial data
+
+We will be combining the `product.csv` dataset with a dataset of 1000 persons generated on the fly
+showing which products they purchased, and where they live.
 
 Test the data generation script as follows:
 ```bash
 python generate_data.py
 ```
 
+### Create the graph
+
 Create a Kùzu database that uses the products and the generated person data as follows:
+
 ```bash
 python create_graph.py
 ```
