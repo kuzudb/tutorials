@@ -72,8 +72,8 @@ indexes = conn.execute("CALL SHOW_INDEXES() RETURN *;").get_as_pl()
 # --- Run FTS queries ---
 
 queries = [
-    # "cotton rug",
-    "oak coffee table",
+    "cotton rug",
+    "wooden coffee table",
 ]
 
 for query in queries:
