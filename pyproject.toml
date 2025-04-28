@@ -1,3 +1,21 @@
+[project]
+name = "tutorials"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "faker>=35.2.0",
+    "kuzu>=0.8.0",
+    "polars>=1.21.0",
+    "pyarrow>=19.0.0",
+]
+
 [tool.ruff]
 line-length = 100
 fix = true
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+]
