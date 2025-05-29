@@ -1,0 +1,4 @@
+kuzu==0.9.0
+polars==1.28.1
+pyarrow==20.0.0
+ipykernel==6.29.5
