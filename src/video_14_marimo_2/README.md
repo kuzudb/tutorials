@@ -38,8 +38,11 @@ To iterate on your ideas and experiment with your approach, you can work through
 notebook in the following marimo file:
 
 ```bash
-uv run marimo run graph_rag.py
+uv run marimo run demo_workflow.py
 ```
+
+The purpose of this file is to demonstrate the workflow in distinct stages, making it easier to
+understand and modify each part of the process in marimo.
 
 ### Run the Graph RAG app
 
@@ -48,5 +51,5 @@ idea is general and this can be extended to include advanced retrieval workflows
 interactive graph visualizations via anywidget, and more. More on this in future tutorials!
 
 ```bash
-uv run marimo run app.py
+uv run marimo run graph_rag.py
 ```
