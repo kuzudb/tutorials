@@ -38,7 +38,7 @@ To iterate on your ideas and experiment with your approach, you can work through
 notebook in the following marimo file:
 
 ```bash
-uv run marimo run demo_workflow.py
+uv run marimo edit demo_workflow.py
 ```
 
 The purpose of this file is to demonstrate the workflow in distinct stages, making it easier to
