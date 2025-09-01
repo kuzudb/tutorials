@@ -55,7 +55,7 @@ def _(mo):
 
 @app.cell
 def _(kuzu):
-    def get_schema_dict(conn:kuzu.Connection) -> dict[str, list[dict]]:
+    def get_schema_dict(conn: kuzu.Connection) -> dict[str, list[dict]]:
         response = conn.execute("CALL SHOW_TABLES() WHERE type = 'NODE' RETURN *;")
         nodes = [row[1] for row in response]  # type: ignore
         response = conn.execute("CALL SHOW_TABLES() WHERE type = 'REL' RETURN *;")
@@ -158,7 +158,7 @@ def _(BaseModel, Field):
     class Edge(BaseModel):
         label: str = Field(description="Relationship label")
         from_: Node = Field(alias="from", description="Source node label")
-        to: Node = Field(alias="from", description="Target node label")
+        to: Node = Field(description="Target node label")
         properties: list[Property] | None
 
     class GraphSchema(BaseModel):
@@ -315,6 +315,7 @@ def _(mo):
     Next, we run the Cypher query on the database.
 
     Depending on the complexity of the question and the LM's knowledge of Cypher, the query may or may not be correct. What constitutes a "correct" query can be thought of in two ways:
+
     - Syntax: Does the Cypher query even compile and is it valid?
     - Semantics: Does the query actually retrieve the right data, and has it interpreted the direction of the relationship correctly?
 

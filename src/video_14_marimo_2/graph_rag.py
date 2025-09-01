@@ -20,7 +20,7 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    text_ui = mo.ui.text(value="Which scholars won prizes in Physics and were affiliated with University of Cambridge?", full_width=True)
+    text_ui = mo.ui.text(value="When and where was Albert Einstein born?", full_width=True)
     return (text_ui,)
 
 
@@ -51,10 +51,10 @@ def _(answer, mo, query):
     return
 
 
-app._unparsable_cell(
-    r"""
-    \"class PruneSchema(dspy.Signature):
-        \"\"\"
+@app.cell
+def _(GraphSchema, Query, dspy):
+    class PruneSchema(dspy.Signature):
+        """
         Understand the given labelled property graph schema and the given user question. Your task
         is to return ONLY the subset of the schema (node labels, edge labels and properties) that is
         relevant to the question.
@@ -62,7 +62,7 @@ app._unparsable_cell(
             - The nodes are the entities in the graph.
             - The edges are the relationships between the nodes.
             - Properties of nodes and edges are their attributes, which helps answer the question.
-        \"\"\"
+        """
 
         question: str = dspy.InputField()
         input_schema: str = dspy.InputField()
@@ -70,7 +70,7 @@ app._unparsable_cell(
 
 
     class Text2Cypher(dspy.Signature):
-        \"\"\"
+        """
         Translate the question into a valid Cypher query that respects the graph schema.
 
         <SYNTAX>
@@ -91,7 +91,7 @@ app._unparsable_cell(
         - Do not attempt to coerce data types to number formats (e.g., integer, float) in your results.
         - NO Cypher keywords should be returned by your query.
         </RETURN_RESULTS>
-        \"\"\"
+        """
 
         question: str = dspy.InputField()
         input_schema: str = dspy.InputField()
@@ -99,26 +99,23 @@ app._unparsable_cell(
 
 
     class AnswerQuestion(dspy.Signature):
-        \"\"\"
+        """
         - Use the provided question, the generated Cypher query and the context to answer the question.
         - If the context is empty, state that you don't have enough information to answer the question.
-        - When dealing with dates, mention the month in full.
-        \"\"\"
+        """
 
         question: str = dspy.InputField()
         cypher_query: str = dspy.InputField()
         context: str = dspy.InputField()
         response: str = dspy.OutputField()
-    """,
-    name="_"
-)
+    return AnswerQuestion, PruneSchema, Text2Cypher
 
 
 @app.cell
 def _(BAMLAdapter, OPENROUTER_API_KEY, dspy):
     # Using OpenRouter. Switch to another LLM provider as needed
     lm = dspy.LM(
-        model="openrouter/google/gemini-2.0-flash-001",
+        model="openrouter/openai/gpt-4.1-mini",
         api_base="https://openrouter.ai/api/v1",
         api_key=OPENROUTER_API_KEY,
     )
@@ -131,7 +128,7 @@ def _(kuzu):
     class KuzuDatabaseManager:
         """Manages Kuzu database connection and schema retrieval."""
 
-        def __init__(self, db_path: str = "ldbc_1.kuzu"):
+        def __init__(self, db_path: str = "nobel.kuzu"):
             self.db_path = db_path
             self.db = kuzu.Database(db_path, read_only=True)
             self.conn = kuzu.Connection(self.db)
@@ -190,14 +187,14 @@ def _(BaseModel, Field):
     class Edge(BaseModel):
         label: str = Field(description="Relationship label")
         from_: Node = Field(alias="from", description="Source node label")
-        to: Node = Field(alias="from", description="Target node label")
+        to: Node = Field(description="Target node label")
         properties: list[Property] | None
 
 
     class GraphSchema(BaseModel):
         nodes: list[Node]
         edges: list[Edge]
-    return (Query,)
+    return GraphSchema, Query
 
 
 @app.cell
@@ -246,6 +243,9 @@ def _(
             return query, results
 
         def forward(self, db_manager: KuzuDatabaseManager, question: str, input_schema: str):
+            """
+            Contains the full pipeline logic that we can then use downstream to optimize (if we wish).
+            """
             final_query, final_context = self.run_query(db_manager, question, input_schema)
             if final_context is None:
                 print("Empty results obtained from the graph database. Please retry with a different question.")
@@ -260,23 +260,6 @@ def _(
                     "answer": answer,
                 }
                 return response
-
-        async def aforward(self, db_manager: KuzuDatabaseManager, question: str, input_schema: str):
-            final_query, final_context = self.run_query(db_manager, question, input_schema)
-            if final_context is None:
-                print("Empty results obtained from the graph database. Please retry with a different question.")
-                return {}
-            else:
-                answer = self.generate_answer(
-                    question=question, cypher_query=final_query, context=str(final_context)
-                )
-                response = {
-                    "question": question,
-                    "query": final_query,
-                    "answer": answer,
-                }
-                return response
-
 
     def run_graph_rag(questions: list[str], db_manager: KuzuDatabaseManager) -> list[Any]:
         schema = str(db_manager.get_schema_dict)
