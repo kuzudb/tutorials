@@ -58,7 +58,7 @@ uv run marimo run rag.py
 To run in app mode, use the following command:
 
 ```bash
-uv run marimo run rag.py
+uv run marimo edit rag.py
 ```
 
 Have fun iterating on the notebook and extending the app!
