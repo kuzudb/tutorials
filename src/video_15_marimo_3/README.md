@@ -22,7 +22,7 @@ The Graph RAG pipeline is built on top of a graph of Nobel laureates from the [p
 Create the required graph in Kuzu using the following script:
 
 ```bash
-uv run create_nobel_api_graph.py.py
+uv run create_nobel_api_graph.py
 ```
 
 Alternatively, you can open the script as a marimo notebook and run each cell individually to
