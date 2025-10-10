@@ -1,8 +1,6 @@
 <div align="center">
 <p align="center">
 
-<img width="275" alt="Kùzu logo" src="https://kuzudb.com/img/kuzu-logo.png">
-
 **An embedded graph database built for query speed and scalability**
 
 [![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/VtX2gw9Rug)
